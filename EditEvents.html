@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <style>
+        body {font-family: Arial, Helvetica, sans-serif;}
+        form {border: 3px solid #f1f1f1;}
+
+        input[type=text], input[type=number] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        input[type=smalltext] {
+            width: 60%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #57af54;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 30%;
+            align: center;
+        }
+
+
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .btn-file {
+            position: relative;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+
+        #img-upload{
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2 align ="center">Edit Event</h2>
+
+<form action="AddEvent.php" method = "post">
+    <div class="container">
+        <div class="row1">
+            <div class="col-sm-6">
+                    <input type="number" step="1" placeholder="Event ID" name="eid" id="eid" required>
+                    <input type="text" placeholder="Event Title" name="etitle" id="etitle" required>
+
+                    <div class="form-group">
+                        <label>Upload Image</label>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <span class="btn btn-default btn-file">
+                                    Browse… <input type="file" id="imgInp">
+                                </span>
+                            </span>
+                            <input type="text" class="form-control" readonly>
+                        </div>
+                        <img id='img-upload'/>
+                    </div>
+
+            </div>
+            <div class="col-sm-6">
+                <div class="col-sm-12"><label><input type="checkbox" checked="checked" name="memberonly" id="memberOnly"> Member only</label></div>
+                <div class="col-sm-12"><label><input type="checkbox" checked="checked" name="sendtomember" id="sendToMembersOnly">Send to members only</label></div>
+
+                <div class="col-sm-12">
+                    <label for="category">Category</label>
+                    <select id="category" name="category">
+                        <option value="Type1">Type1</option>
+                        <option value="Type2">Type2</option>
+                        <option value="Type3">Type3</option>
+                        <option value="Type4">Type4</option>
+                    </select>
+                </div >
+                <div class="col-sm-12">
+                    <label for="recurfrequency">Recurring frequency</label>
+                    <select id="recurFrequency" name="recurfrequency" onchange="setRecurring()">
+                        <option value="None">None</option>
+                        <option value="Every day">Every day</option>>
+                        <option value="Every week">Every week</option>
+                        <option value="Every month">Every month</option>
+                        <option value="Every year">Every year</option>
+                    </select>
+                </div>
+                <div class="col-sm-5">
+                    <label for="recurMonths">Recurring months</label>
+                    <select multiple class="recurMonths" size="3" id="recurMonths" name="recurMonths[]">
+                        <option value="1">January</option><option value="2">February</option>
+                        <option value="3">March</option><option value="4">April</option>
+                        <option value="5">May</option><option value="6">June</option>
+                        <option value="7">July</option><option value="8">August</option>
+                        <option value="9">September</option><option value="10">October</option>
+                        <option value="11">November</option><option value="12">December</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-5">
+                    <label for="recurWeeks">Recurring weeks</label>
+                    <select multiple class="recurWeeks" size="3" id="recurWeeks" name="recurWeeks[]">
+                        <option value="1">One</option><option value="2">Two</option>
+                        <option value="3">Three</option><option value="4">Four</option>
+                    </select>
+                </div>
+                <div class="col-sm-5">
+                    <label for="recurDays">Recurring Days</label>
+                    <select multiple class="recurDays" size="3" id="recurDays" name="recurDays[]">
+                        <option value="1">Sunday</option><option value="2">Monday</option>
+                        <option value="3">Tuesday</option><option value="4">Wednesday</option>
+                        <option value="5">Thursday</option><option value="6">Friday</option>
+                        <option value="7">Saturday`</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-5">
+                    <lable for="endrepeat"><b>End Repeat</b></lable>
+                    <input type="date" name="endrepeat" id="endRepeat">
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <textarea rows="3" cols="110" placeholder="Short Description" name="shortdescription" id="shortDes" required></textarea>
+            <textarea rows="3" cols="110" placeholder="Long Description" name="longdescription" id="longDes" required></textarea>
+
+        </div>
+
+        <div class="row2">
+            <div class="col-sm-6">
+                <input type="text" placeholder="Web info URL" name="infourl" id="infoURL">
+                <input type="text" placeholder="Ticket purchase URL" name="ticketurl" id="ticketURL" >
+            </div>
+
+            <div class="col-sm-6 style="margin: 8px 0">
+                <div class="col-sm-5">
+                Start Date: <input type="date" name="startdate" id="startDate">
+                </div>
+                <div class="col-sm-5">
+                End Date:<input type="date" name="enddate" id="endDate">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="col-sm-5">
+                Start Time:<input type="time" name="starttime" id="startTime">
+                </div>
+                <div class="col-sm-5">
+                End Time:<input type="time" name="endtime" id="endTime">
+                </div>
+            </div>
+
+
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <button type="submit">Save</button>
+                </div>
+                <div class="col-sm-6">
+                    <button type="clear">clear</button>
+                </div>
+            </div>
+
+        </div>
+
+    <p id="demo"></p>
+
+
+    </div>
+</form>
+
+<script>
+
+    const text = localStorage.getItem("isEdit");
+
+
+    if(text == "true")
+    {
+        var eventSet = JSON.parse(localStorage.getItem("event"));
+
+        //document.getElementById("demo").innerHTML = eventSet.recurring_response.days;
+
+        document.getElementById("eid").value = eventSet.id;
+        document.getElementById("etitle").value = eventSet.title;
+        document.getElementById("shortDes").value = eventSet.short_desc;
+        document.getElementById("longDes").value = eventSet.long_desc;
+        document.getElementById("category").value = eventSet.category;
+        document.getElementById("startDate").value = eventSet.start_date;
+        document.getElementById("endDate").value = eventSet.end_date;
+        document.getElementById("memberOnly").value = eventSet.is_member_only;
+        document.getElementById("sendToMembersOnly").value = eventSet.send_to_members_only;
+        //document.getElementById("etitle").value = eventSet.photo_url;
+        document.getElementById("ticketURL").value = eventSet.ticket_url;
+        document.getElementById("infoURL").value = eventSet.more_info_url;
+        document.getElementById("startTime").value = eventSet.start_time;
+        document.getElementById("endTime").value = eventSet.end_time;
+
+
+
+        if(eventSet.is_recurring == "1")
+        {
+            document.getElementById("endRepeat").value = eventSet.recurring_response.end_repeat;
+            var days = eventSet.recurring_response.days.split(",");
+            $("#recurDays").val(days);
+            //$("#recurDays").multiselect("refresh");
+            var weeks = eventSet.recurring_response.weeks.split(",");
+            $("#recurWeeks").val(weeks);
+            //$("#recurWeeks").multiselect("refresh");
+
+            var months = eventSet.recurring_response.months.split(",");
+            $("#recurMonths").val(months);
+            //$("#recurMonths").multiselect("refresh");
+
+            //$("#recurDays").val(['1','7']);
+            //document.getElementById("recurDays").value = eventSet.recurring_response.days;
+            //document.getElementById("recurWeeks").value = eventSet.recurring_response.weeks;
+            //document.getElementById("recurMonths").value = eventSet.recurring_response.months;
+            document.getElementById("recurFrequency").value = eventSet.recurring_response.frequency;
+        }
+    }
+
+    function setRecurring()
+    {
+        var x = document.getElementById("recurFrequency").value;
+        if(x=="Every day")
+        {
+            document.getElementById("recurMonths").disabled = true;
+            document.getElementById("recurWeeks").disabled = true;
+            document.getElementById("recurDays").disabled = true;
+        }
+        if(x=="Every week")
+        {
+            document.getElementById("recurMonths").disabled = true;
+            document.getElementById("recurWeeks").disabled = true;
+            document.getElementById("recurDays").disabled = false;
+        }
+        if(x=="Every month")
+        {
+            document.getElementById("recurMonths").disabled = true;
+            document.getElementById("recurWeeks").disabled = false;
+            document.getElementById("recurDays").disabled = false;
+        }
+        if(x=="Every year")
+        {
+            document.getElementById("recurMonths").disabled = false;
+            document.getElementById("recurWeeks").disabled = false;
+            document.getElementById("recurDays").disabled = false;
+        }
+
+    }
+    $(document).ready( function() {
+        $(document).on('change', '.btn-file :file', function() {
+            var input = $(this),
+                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [label]);
+        });
+
+        $('.btn-file :file').on('fileselect', function(event, label) {
+
+            var input = $(this).parents('.input-group').find(':text'),
+                log = label;
+
+            if( input.length ) {
+                input.val(log);
+            } else {
+                if( log ) alert(log);
+            }
+
+        });
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#img-upload').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imgInp").change(function(){
+            readURL(this);
+        });
+    });
+</script>>
+
+</body>
+
+</html>

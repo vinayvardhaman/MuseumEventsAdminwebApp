@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin Home</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+
+        .header {
+            background-color: #f1f1f1;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .form-group {
+            width: 40%;
+        }
+        .container {
+            width: 120%;
+        }
+
+        .search-container {
+            float: right;
+        }
+
+        input[type=text] {
+            padding: 6px;
+            font-size: 17px;
+            border: 1px solid #256b7f;
+        }
+
+        .search-container button {
+            float: right;
+            padding: 6px 10px;
+            margin-right: 16px;
+            background: #ddd;
+            font-size: 17px;
+            border: 1px solid #256b7f;
+            cursor: pointer;
+        }
+
+        .search-container button:hover {
+            background: #ccc;
+        }
+        @media screen and (max-width: 600px) {
+            .topnav .search-container {
+                float: none;
+            }
+            .topnav input[type=text], .search-container button {
+                float: none;
+                display: block;
+                text-align: left;
+                width: 100%;
+                margin: 0;
+                padding: 14px;
+            }
+            input[type=text] {
+                border: 1px solid #0f131e;
+            }
+        }
+        .custom-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .custom-list li {
+            position: relative;
+            padding-left: 20px;
+        }
+        .custom-list li::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            background-image: attr(img-src); 'url("http://localhost/vinay.jpg");'
+            background-size: cover;
+            background-position: center;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Admin Home</h1>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <span style="font-size: x-large; ">Event List</span>
+            <div class="search-container">
+                <form action="/action_page.php">
+                    <input type="text" placeholder="Search.." name="search">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-1">
+
+        </div>
+        <div class="col-sm-1" onclick="addEvent()">
+            <a href ="EditEvents.html"><i class="fa fa-plus-circle" style="font-size:36px;"></i></a>
+        </div>
+        <div class="col-sm-1" onclick="editEvent()">
+            <a href="EditEvents.html"><i class="fa fa-edit" style="font-size:36px;"></i></a>
+        </div>
+        <div class="col-sm-1"><i class="fa fa-trash" style="font-size:36px;"></i></div>
+        <!--<div class="col-sm-1"><i class="fa fa-search" style="font-size:36px;"></i></div>-->
+        <div class="col-sm-1"><i class="glyphicon glyphicon-option-vertical" style="font-size:36px;"></i></div>
+    </div>
+
+  <div class="form-group">
+    <select multiple class="form-control" size="6" id="EventSelect" onchange="selectfunction()"></select>
+  </div>
+
+    <div>
+        <ul class="custom-list" id="eventList">
+            <li>Event Sample1</li>
+            <li>Event Sample2</li>
+            <li>Event Sample3</li>
+        </ul>
+    </div>
+
+</div>
+
+<p id="demo"></p>
+
+
+<script>
+
+    var jsonData;
+    var eventData;
+    var sel = document.getElementById("EventSelect");
+    $.ajax({
+        url: 'http://localhost/get_events.php',
+        method: 'get',
+
+        success:function(jsonData)
+        {
+            eventData = JSON.parse(jsonData);
+            //alert(eventData[0].start_date);
+            console.log("success");
+
+            for(var i=0; i<eventData.length; i++)
+            {
+                var opt = document.createElement("option");
+                opt.innerHTML = eventData[i].title;
+                opt.value = eventData[i].title;
+                sel.appendChild(opt);
+            }
+
+            var ul = document.getElementById("eventList");
+            for(var i=0; i<eventData.length; i++)
+            {
+                var li = document.createElement("li");
+                var bef = document.createElement("li::before");
+                bef.setAttribute("content","");
+                li.appendChild(document.createTextNode(eventData[i].title));
+                li.setAttribute("id",eventData[i].id);
+                //var img = document.createElement("img");
+                //bef.style.backgroundImage = "url(http://localhost/vinay.jpg)";
+                //li.appendChild(bef);
+                //$('li').attr('img-src',"http://localhost/vinay.jpg");
+                ul.appendChild(li);
+            }
+            for(var i=0; i<eventData.length; i++)
+            {
+                $(eventData[i].id).attr('img-src',"http://localhost/vinay.jpg");
+            }
+        },
+        error:function(jsonData){
+        alert("error");
+        console.log("jsonData");
+        }
+    });
+
+function selectfunction()
+{
+    const event = document.getElementById("EventSelect").value;
+    document.getElementById("demo").innerHTML = event;
+    var selectedeventdata;
+    for(var i=0; i<eventData.length; i++)
+    {
+        if(eventData[i].title == event)
+            selectedeventdata = eventData[i];
+    }
+    localStorage.setItem("event",JSON.stringify(selectedeventdata));
+}
+
+function editEvent()
+{
+    localStorage.setItem("isEdit","true");
+}
+
+function addEvent()
+{
+    localStorage.setItem("isEdit","false");
+}
+
+function myFunction() {
+    const s = document.getElementsByClassName("form-control")[0];
+    const text = s.options[s.selectedIndex].text;
+    //document.getElementById("demo").innerHTML = text;
+}
+</script>
+
+</body>
+</html>
